@@ -6,14 +6,8 @@ const helpers = {
   json: JSON.stringify
 }
 
-const useRequestTemplate = handlebars.compile(
+const useMultipartMixedRequestBodyTemplate = handlebars.compile(
   `
-{{#if batchUrl }}
-POST {{batchUrl}} HTTP/1.1
-Content-Type: multipart/mixed; boundary="{{boundary}}"
-{{/if}}
-
-
 {{#each requests}}
 --{{../boundary}}
 Content-Type: application/http
@@ -33,8 +27,7 @@ Content-Type: application/json
 {{/each}}
 {{#if requests}}
 --{{boundary}}--
-{{/if}}
-`
+{{/if}}`
 )
 
 interface MinimalFetchRequestInfo {
@@ -44,15 +37,27 @@ interface MinimalFetchRequestInfo {
   body?: FetchRequest['body']
 }
 
-interface MakeMultipartMixedRequestImplInput {
+interface MakeMultipartMixedRequestBodyInput {
   requests: ReadonlyArray<MinimalFetchRequestInfo>
   boundary: string
-  batchUrl?: string
 }
 
-export const makeMultipartMixedRequestImpl = (
-  data: MakeMultipartMixedRequestImplInput
-): string => useRequestTemplate(data, { helpers })
+const makeMultipartMixedRequestBody = (
+  data: MakeMultipartMixedRequestBodyInput
+): string => useMultipartMixedRequestBodyTemplate(data, { helpers })
+
+const googleapisUrl = 'https://www.googleapis.com'
+
+const guessBatchUrl = (url: URL): string => {
+  if (url.origin === googleapisUrl) {
+    const tokens = url.pathname.split('/')
+    const apiName = tokens[1]
+    const apiVersion = tokens[2]
+    return `${googleapisUrl}/batch/${apiName}/${apiVersion}`
+  } else {
+    return `${url.origin}/batch`
+  }
+}
 
 const fetchRequestToMinimalFetchRequestInfo = (
   req: FetchRequest
@@ -69,7 +74,7 @@ const fetchRequestToMinimalFetchRequestInfo = (
   return [batchUrl, minimalRequestInfo]
 }
 
-const prepareMakeMultipartMixedRequestImplInput = (
+const prepareMakeMultipartMixedRequestBodyInput = (
   requests: ReadonlyArray<FetchRequest>
 ): {
   requests: ReadonlyArray<MinimalFetchRequestInfo>
@@ -99,19 +104,6 @@ const prepareMakeMultipartMixedRequestImplInput = (
   return res
 }
 
-const googleapisUrl = 'https://www.googleapis.com'
-
-const guessBatchUrl = (url: URL): string => {
-  if (url.origin === googleapisUrl) {
-    const tokens = url.pathname.split('/')
-    const apiName = tokens[1]
-    const apiVersion = tokens[2]
-    return `${googleapisUrl}/batch/${apiName}/${apiVersion}`
-  } else {
-    return `${url.origin}/batch`
-  }
-}
-
 interface MultipartMixedRequestInfo {
   body: string
   method: string
@@ -119,13 +111,16 @@ interface MultipartMixedRequestInfo {
   headers: Record<string, string>
 }
 
-export const makeMultipartMixedRequest = (
-  inputs: ReadonlyArray<FetchRequest>,
+export const makeMultipartMixedRequest = ({
+  boundary,
+  requests: inputs
+}: {
+  requests: ReadonlyArray<FetchRequest>
   boundary: string
-): MultipartMixedRequestInfo => {
+}): MultipartMixedRequestInfo => {
   const { requests, batchUrl } =
-    prepareMakeMultipartMixedRequestImplInput(inputs)
-  const body = makeMultipartMixedRequestImpl({ boundary, requests })
+    prepareMakeMultipartMixedRequestBodyInput(inputs)
+  const body = makeMultipartMixedRequestBody({ boundary, requests })
   return {
     body,
     method: 'POST',
@@ -134,4 +129,22 @@ export const makeMultipartMixedRequest = (
       'Content-Type': `multipart/mixed; boundary="${boundary}"`
     }
   }
+}
+
+const useMultipartMixedRequestFullTemplate = handlebars.compile(
+  `
+{{method}} {{batchUrl}} HTTP/1.1
+{{#each headers}}
+{{@key}}: {{{this}}}
+{{/each}}
+
+{{{body}}}`
+)
+
+export const makeMultipartMixedRequestFullText = (data: {
+  requests: ReadonlyArray<FetchRequest>
+  boundary: string
+}): string => {
+  const info = makeMultipartMixedRequest(data)
+  return useMultipartMixedRequestFullTemplate(info)
 }

@@ -1,16 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { makeMultipartMixedRequestImpl } from './makeMultipartMixedRequest.js'
+import { makeMultipartMixedRequestFullText } from './makeMultipartMixedRequest.js'
+import { fetchRequestFactory, googleApisUrlFactory } from './testUtils.js'
 
 describe('makeMultipartMixedRequest', () => {
   it('does not output a body if requests are empty', () => {
-    const out = makeMultipartMixedRequestImpl({
+    const out = makeMultipartMixedRequestFullText({
       requests: [],
-      boundary: 'batch_people',
-      batchUrl: '/batch'
+      boundary: 'batch_people'
+      // batchUrl: '/batch'
     })
 
     const expected = `
-POST /batch HTTP/1.1
+POST not_a_valid_url HTTP/1.1
 Content-Type: multipart/mixed; boundary="batch_people"
 
 
@@ -19,21 +20,38 @@ Content-Type: multipart/mixed; boundary="batch_people"
     expect(out).toBe(expected)
   })
 
+  it('throws if 2 requests have different batch endpoints', () => {
+    expect(() =>
+      makeMultipartMixedRequestFullText({
+        boundary: 'batch_people',
+        requests: [
+          fetchRequestFactory({
+            url: googleApisUrlFactory({ apiName: 'api1' })
+          }),
+          fetchRequestFactory({
+            url: googleApisUrlFactory({ apiName: 'api2' })
+          })
+        ]
+      })
+    ).toThrow(
+      'Batch requests must be for the same batching endpoint. Found https://api1.googleapis.com/batch and https://api2.googleapis.com/batch'
+    )
+  })
+
   it('prints all the provided headers', () => {
-    const out = makeMultipartMixedRequestImpl({
+    const out = makeMultipartMixedRequestFullText({
       requests: [
-        {
-          path: '/v1/people',
+        fetchRequestFactory({
+          url: googleApisUrlFactory({ apiName: 'people', path: '/v1/people' }),
           method: 'GET',
           headers: { Foo: 'Foo', Bar: 'Bar' }
-        }
+        })
       ],
-      boundary: 'batch_people',
-      batchUrl: '/batch'
+      boundary: 'batch_people'
     })
 
     const expected = `
-POST /batch HTTP/1.1
+POST https://people.googleapis.com/batch HTTP/1.1
 Content-Type: multipart/mixed; boundary="batch_people"
 
 
@@ -54,26 +72,31 @@ Bar: Bar
   })
 
   it('constructs a valid multipart/mixed request with multiple parts', () => {
-    const out = makeMultipartMixedRequestImpl({
+    const out = makeMultipartMixedRequestFullText({
       requests: [
-        {
-          path: '/v1/people:createContact',
+        fetchRequestFactory({
+          url: googleApisUrlFactory({
+            apiName: 'people',
+            path: '/v1/people:createContact'
+          }),
           method: 'POST',
           body: {
             names: [{ givenName: 'John', familyName: 'Doe' }]
           }
-        },
-        {
-          path: '/v1/people/c123456789012345?personFields=emailAddresses',
+        }),
+        fetchRequestFactory({
+          url: googleApisUrlFactory({
+            apiName: 'people',
+            path: '/v1/people/c123456789012345?personFields=emailAddresses'
+          }),
           method: 'GET'
-        }
+        })
       ],
-      boundary: 'batch_people',
-      batchUrl: '/batch'
+      boundary: 'batch_people'
     })
 
     const expected = `
-POST /batch HTTP/1.1
+POST https://people.googleapis.com/batch HTTP/1.1
 Content-Type: multipart/mixed; boundary="batch_people"
 
 
