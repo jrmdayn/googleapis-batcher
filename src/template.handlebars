@@ -1,0 +1,20 @@
+{{#each requests}}
+--{{../boundary}}
+Content-Type: application/http
+Content-ID: {{inc @index}}
+
+{{method}} {{path}} HTTP/1.1
+Accept: application/json
+{{#each headers}}
+{{@key}}:{{this}}
+{{/each}}
+{{#if body}}
+Content-Type: application/json
+{{{json body}}}
+{{/if}}
+
+
+{{/each}}
+{{#if requests}}
+--{{boundary}}--
+{{/if}}

@@ -19,7 +19,7 @@
     "lint": "eslint --ext .ts src/**",
     "typecheck": "tsc --noEmit",
     "build": "npm run lint && tsup src/index.ts --dts --format cjs,esm",
-    "test": "vitest run"
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/node": "16.11.22",
@@ -31,10 +31,12 @@
     "prettier": "^2.7.1",
     "tsup": "^6.2.3",
     "typescript": "^4.8.2",
+    "vite": "^4.0.2",
     "vitest": "^0.23.1"
   },
   "dependencies": {
     "dataloader": "^2.1.0",
+    "handlebars": "^4.7.7",
     "http-string-parser": "^0.0.6",
     "node-fetch": "^3.3.0"
   },
