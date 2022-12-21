@@ -1,17 +1,41 @@
 import Dataloader, { Options as DataloaderOptions } from 'dataloader'
+import { EventEmitter } from 'node:stream'
 import { makeMultipartMixedRequest } from './makeMultipartMixedRequest/index.js'
+import { parseMultipartMixedReponse } from './parseMulitpartMixedResponse.js'
 
 import type { GaxiosOptions } from 'gaxios'
 import type { FetchServiceTag } from './fetchService.js'
 import type { RandomStringServiceTag } from './randomStringService.js'
 import type { FetchRequest, FetchResponse } from './types.js'
-import { parseMultipartMixedReponse } from './parseMulitpartMixedResponse.js'
 
 type FetchImplementation = Required<GaxiosOptions>['fetchImplementation']
+
+const signalSymbol = Symbol('BatchSchedulerSignal')
+
+interface BatchSchedulerSignal {
+  readonly __tag: typeof signalSymbol
+  schedule: () => void
+  onSchedule: (cb: () => void) => void
+}
+
+export const makeBatchSchedulerSignal = (): BatchSchedulerSignal => {
+  const ee = new EventEmitter()
+  const signal: BatchSchedulerSignal = {
+    __tag: signalSymbol,
+    schedule: () => {
+      ee.emit('schedule')
+    },
+    onSchedule: (cb) => {
+      ee.addListener('schedule', cb)
+    }
+  }
+  return signal
+}
 
 interface BatchOptions {
   maxBatchSize?: number
   batchWindowMs?: number
+  signal?: BatchSchedulerSignal
 }
 
 interface BatchOptionsTag {
@@ -33,7 +57,24 @@ export const makeBatchFetchImplementation = ({
     dataloaderOptions.maxBatchSize = Math.min(1000, options.maxBatchSize)
   }
 
+  if (options?.signal !== undefined) {
+    let callbacks: Array<() => void> = []
+    const dispatch = (): void => {
+      callbacks.forEach((callback) => callback())
+      callbacks = []
+    }
+    dataloaderOptions.batchScheduleFn = (cb): void => {
+      callbacks.push(cb)
+    }
+    options.signal.onSchedule(dispatch)
+  }
+
   if (options?.batchWindowMs !== undefined) {
+    if (dataloaderOptions.batchScheduleFn !== undefined)
+      throw new Error(
+        'You cannot provide both batchWindowMs and signal options at the same time'
+      )
+
     dataloaderOptions.batchScheduleFn = (cb): void => {
       setTimeout(cb, options.batchWindowMs)
     }
