@@ -97,13 +97,12 @@ export const makeBatchFetchImplementation = ({
         boundary,
         requests
       })
-      const rsp = await fetchService.fetchAsText({
+      const rsp = await fetchService.fetch({
         url: batchUrl,
         body,
         headers,
         method
       })
-
       return parseMultipartMixedReponse(rsp)
     },
     dataloaderOptions
