@@ -1,12 +1,14 @@
 import Dataloader, { Options as DataloaderOptions } from 'dataloader'
 import { EventEmitter } from 'node:stream'
-import { makeMultipartMixedRequest } from './makeMultipartMixedRequest/index.js'
-import { parseMultipartMixedReponse } from './parseMulitpartMixedResponse.js'
+import { makeMultipartMixedRequest } from './makeMultipartMixedRequest/makeMultipartMixedRequest.js'
+import { parseMultipartMixedReponse } from './parseMulitpartMixedResponse/parseMulitpartMixedResponse.js'
 
 import type { GaxiosOptions } from 'gaxios'
-import type { FetchServiceTag } from './fetchService.js'
-import type { RandomStringServiceTag } from './randomStringService.js'
+import type { FetchServiceTag } from './services/fetchService.js'
+import type { RandomStringServiceTag } from './services/randomStringService.js'
 import type { FetchRequest, FetchResponse } from './types.js'
+import { nodeFetchService } from './services/nodeFetchService.js'
+import { nodeRandomStringService } from './services/nodeRandomStringService.js'
 
 type FetchImplementation = Required<GaxiosOptions>['fetchImplementation']
 
@@ -43,12 +45,12 @@ interface BatchOptionsTag {
 }
 
 export const makeBatchFetchImplementation = ({
-  fetchService,
-  options,
-  randomStringService
+  fetchService = nodeFetchService,
+  randomStringService = nodeRandomStringService,
+  options
 }: BatchOptionsTag &
-  FetchServiceTag &
-  RandomStringServiceTag): FetchImplementation => {
+  Partial<FetchServiceTag> &
+  Partial<RandomStringServiceTag> = {}): FetchImplementation => {
   const dataloaderOptions: DataloaderOptions<FetchRequest, FetchResponse> = {}
 
   if (options?.maxBatchSize !== undefined) {

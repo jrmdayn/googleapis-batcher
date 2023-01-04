@@ -1,5 +1,5 @@
 import { makeFetchResponse, parseOnePart } from './parseOnePart.js'
-import type { FetchResponse } from './types.js'
+import type { FetchResponse } from '../types.js'
 
 const multipartMixedBoundary = 'multipart/mixed; boundary='
 
