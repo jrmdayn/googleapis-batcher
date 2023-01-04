@@ -53,11 +53,9 @@ export const makeBatchFetchImplementation = ({
   Partial<RandomStringServiceTag> = {}): FetchImplementation => {
   const dataloaderOptions: DataloaderOptions<FetchRequest, FetchResponse> = {}
 
-  if (options?.maxBatchSize !== undefined) {
-    // the maximum number of requests per batch is set to 1000 by Google
-    // https://developers.google.com/people/v1/batch#overview
-    dataloaderOptions.maxBatchSize = Math.min(1000, options.maxBatchSize)
-  }
+  // the maximum number of requests per batch is set to 1000 by Google
+  // https://developers.google.com/people/v1/batch#overview
+  dataloaderOptions.maxBatchSize = Math.min(1000, options?.maxBatchSize ?? 1000)
 
   if (options?.signal !== undefined) {
     let callbacks: Array<() => void> = []
