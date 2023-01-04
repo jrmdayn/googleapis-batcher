@@ -38,8 +38,8 @@ export const parseMultipartMixedReponse = async (
 
   return (
     msgBody
-      // remove the last boundary
-      .slice(0, endStr.length)
+      // remove the first and last boundary
+      .slice(splitStr.length, msgBody.length - endStr.length)
       // split the body into multiple parts
       .split(splitStr)
       // parse the various parts
