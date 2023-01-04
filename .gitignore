@@ -2,3 +2,4 @@ node_modules
 dist
 *.log*
 *.local
+.googleapis-credentials.json

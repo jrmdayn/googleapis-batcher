@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { makeMultipartMixedRequestFullText } from './makeMultipartMixedRequest.js'
-import { fetchRequestFactory, googleApisUrlFactory } from '../testUtils.js'
+import {
+  fetchRequestFactory,
+  googleApisUrlFactory
+} from '../testUtils/factories.js'
 
 describe('makeMultipartMixedRequest', () => {
   it('does not output a body if requests are empty', () => {

@@ -1,4 +1,4 @@
-import { FetchRequest } from './types.js'
+import { FetchRequest } from '../types.js'
 
 export const fetchRequestFactory = ({
   url = 'https://people.googleapis.com/v1/people',
