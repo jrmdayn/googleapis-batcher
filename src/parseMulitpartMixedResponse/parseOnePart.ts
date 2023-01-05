@@ -1,6 +1,6 @@
 import getNextLineIterator from 'next-line'
 import { Headers, Response } from 'node-fetch'
-import { FetchResponse } from './types.js'
+import type { FetchResponse } from '../types.js'
 
 const statusLineRE = /^[A-Z]+\/\d\.\d (\d{3}) (.*)$/
 const headerLineRE = /^([a-zA-Z-]+)\s*:\s*(.+)\s*$/
