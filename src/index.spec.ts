@@ -1,10 +1,10 @@
 import { google } from 'googleapis'
 import { describe, expect, it } from 'vitest'
-import { makeBatchFetchImplementation } from './makeBatchFetchImplementation.js'
+import { batchFetchImplementation } from './index.js'
 import oauth from './testUtils/oauth.js'
 
-describe('makeBatchFetchImplementation', () => {
-  const fetchImpl = makeBatchFetchImplementation()
+describe('batchFetchImplementation', () => {
+  const fetchImpl = batchFetchImplementation()
 
   const calendarClient = google.calendar({
     version: 'v3',

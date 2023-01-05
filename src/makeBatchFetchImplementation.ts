@@ -10,7 +10,7 @@ import type { FetchRequest, FetchResponse } from './types.js'
 import { nodeFetchService } from './services/nodeFetchService.js'
 import { nodeRandomStringService } from './services/nodeRandomStringService.js'
 
-type FetchImplementation = Required<GaxiosOptions>['fetchImplementation']
+export type FetchImplementation = Required<GaxiosOptions>['fetchImplementation']
 
 const signalSymbol = Symbol('BatchSchedulerSignal')
 
