@@ -16,7 +16,7 @@ const toMinimalFetchRequestInfo = (
   const batchUrl = guessGoogleapisBatchUrl(url)
   const path = url.href.substring(url.origin.length)
   const minimalRequestInfo: MinimalFetchRequestInfo = {
-    method: req.method ?? 'POST',
+    method: req.method ?? 'GET',
     body: req.body,
     headers: req.headers,
     path

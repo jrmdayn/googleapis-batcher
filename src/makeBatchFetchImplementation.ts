@@ -34,7 +34,7 @@ export const makeBatchSchedulerSignal = (): BatchSchedulerSignal => {
   return signal
 }
 
-interface BatchOptions {
+export interface BatchOptions {
   maxBatchSize?: number
   batchWindowMs?: number
   signal?: BatchSchedulerSignal
@@ -51,7 +51,10 @@ export const makeBatchFetchImplementation = ({
 }: BatchOptionsTag &
   Partial<FetchServiceTag> &
   Partial<RandomStringServiceTag> = {}): FetchImplementation => {
-  const dataloaderOptions: DataloaderOptions<FetchRequest, FetchResponse> = {}
+  const dataloaderOptions: DataloaderOptions<FetchRequest, FetchResponse> = {
+    // do not use caching as it could lead to unintended scenarios
+    cache: false
+  }
 
   // the maximum number of requests per batch is set to 1000 by Google
   // https://developers.google.com/people/v1/batch#overview
@@ -82,10 +85,6 @@ export const makeBatchFetchImplementation = ({
 
   const dataloader = new Dataloader<FetchRequest, FetchResponse>(
     async (requests) => {
-      // We always clear the cache to avoid cache issues
-      // See second example of https://github.com/graphql/dataloader#disabling-cache
-      dataloader.clearAll()
-
       if (requests.length === 0) {
         return []
       }
@@ -107,5 +106,5 @@ export const makeBatchFetchImplementation = ({
     },
     dataloaderOptions
   )
-  return (x, y) => dataloader.load(Object.assign({}, x, y))
+  return (url, params) => dataloader.load(Object.assign({}, { url }, params))
 }
