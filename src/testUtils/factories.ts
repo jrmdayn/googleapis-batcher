@@ -1,4 +1,5 @@
-import { FetchRequest } from '../types.js'
+import { HeadersInit, Response } from 'node-fetch'
+import type { FetchRequest, FetchResponse } from '../types.js'
 
 export const fetchRequestFactory = ({
   url = 'https://people.googleapis.com/v1/people',
@@ -19,3 +20,15 @@ export const googleApisUrlFactory = ({
   path = '/calendar/v3/calendars/john@gmail.com'
 }: Partial<GoogleApisUrlFactoryParams> = {}): string =>
   `https://${apiName}.googleapis.com${path}`
+
+export const fetchResponseFactory = ({
+  body,
+  headers,
+  status,
+  statusText
+}: Partial<{
+  body: unknown
+  headers: HeadersInit
+  status: number
+  statusText: string
+}> = {}): FetchResponse => new Response(body, { headers, status, statusText })

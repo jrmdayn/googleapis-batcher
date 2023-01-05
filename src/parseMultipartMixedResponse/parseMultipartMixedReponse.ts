@@ -22,17 +22,17 @@ export const parseMultipartMixedReponse = async (
 
   const msgBody = (await rsp.text()).trim()
 
-  if (!msgBody.endsWith(endStr)) {
-    throw new Error(
-      `The body of the response does not end with the expected boundary`,
-      { cause: endStr }
-    )
-  }
-
   if (!msgBody.startsWith(splitStr)) {
     throw new Error(
       `The body of the response does not start with the expected boundary`,
       { cause: splitStr }
+    )
+  }
+
+  if (!msgBody.endsWith(endStr)) {
+    throw new Error(
+      `The body of the response does not end with the expected boundary`,
+      { cause: endStr }
     )
   }
 

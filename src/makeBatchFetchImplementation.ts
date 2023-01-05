@@ -1,7 +1,7 @@
 import Dataloader, { Options as DataloaderOptions } from 'dataloader'
 import { EventEmitter } from 'node:stream'
 import { makeMultipartMixedRequest } from './makeMultipartMixedRequest/makeMultipartMixedRequest.js'
-import { parseMultipartMixedReponse } from './parseMulitpartMixedResponse/parseMulitpartMixedResponse.js'
+import { parseMultipartMixedReponse } from './parseMultipartMixedResponse/parseMultipartMixedReponse.js'
 
 import type { GaxiosOptions } from 'gaxios'
 import type { FetchServiceTag } from './services/fetchService.js'
