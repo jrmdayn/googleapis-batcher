@@ -19,7 +19,14 @@ describe('batchFetchImplementation', () => {
       calendarClient.settings.list()
     ])
 
-    expect(calendarList.data).toMatchObject({})
-    expect(settings.data).toMatchObject({})
+    expect(calendarList.status).toBe(200)
+    expect(calendarList.statusText).toBe('OK')
+    expect(calendarList.data.kind).toBe('calendar#calendarList')
+    expect(calendarList.data.items).not.empty
+
+    expect(settings.status).toBe(200)
+    expect(settings.statusText).toBe('OK')
+    expect(settings.data.kind).toBe('calendar#settings')
+    expect(settings.data.items).not.empty
   })
 })
