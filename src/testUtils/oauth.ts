@@ -17,6 +17,7 @@ const scopes = ['openid', 'https://www.googleapis.com/auth/calendar']
 
 const authorizationUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline',
+  prompt: 'consent',
   scope: scopes,
   include_granted_scopes: true
 })
