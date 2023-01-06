@@ -1,11 +1,16 @@
 import http from 'node:http'
-import url from 'node:url'
+import { parse as urlParse } from 'node:url'
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import { google } from 'googleapis'
 import open from 'open'
+import { envsafe, str, url } from 'envsafe'
 
-import env from './env.js'
+const env = envsafe({
+  VITE_GOOGLEAPIS_CLIENT_ID: str(),
+  VITE_GOOGLEAPIS_CLIENT_SECRET: str(),
+  VITE_GOOGLEAPIS_REDIRECT_URL: url()
+})
 
 const oauth2Client = new google.auth.OAuth2(
   env.VITE_GOOGLEAPIS_CLIENT_ID,
@@ -23,7 +28,7 @@ const authorizationUrl = oauth2Client.generateAuthUrl({
 })
 
 const tokensFilePath = new URL(
-  path.join(import.meta.url, '../../../.googleapis-credentials.json')
+  path.join(import.meta.url, '../../.googleapis-credentials.json')
 )
 
 oauth2Client.on('tokens', async (tokens) => {
@@ -52,7 +57,7 @@ if (fileExists) {
           // Receive the callback from Google's OAuth 2.0 server.
           if (req.url?.startsWith('/oauth2callback')) {
             // Handle the OAuth 2.0 server response
-            const q = url.parse(req.url, true).query
+            const q = urlParse(req.url, true).query
 
             if (q.error) {
               // An error response e.g. error=access_denied
