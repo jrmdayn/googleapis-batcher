@@ -1,7 +1,15 @@
 {
-  "name": "node-lib",
-  "version": "1.0.0",
-  "description": "A Node.js library starter",
+  "name": "@jrmdayn/googleapis-batcher",
+  "version": "0.1.0",
+  "description": "A library for batching Google APIs requests in Node.js",
+  "contributors": [
+    "Jeremie Dayan <dayanjeremie@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/jrmdayn/googleapis-batcher",
+  "bugs": {
+    "url": "https://github.com/jrmdayn/googleapis-batcher/issues"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
