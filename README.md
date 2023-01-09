@@ -44,6 +44,105 @@ const [list, get, patch] = await Promise.all([
 
 ```
 
+## Options
+
+### maxBatchSize
+Controls the maximum number of requests to batch together in one HTTP request.
+
+```js
+// limit the number of batched requests to 50
+const fetchImpl = batchFetchImplementation({ maxBatchSize: 50 })
+```
+
+_Note: Google limits the number of batched requests on a per API basis. For example, for the Calendar API it is 50 requests and for the People API it is 1000._
+
+### batchWindowMs
+Controls the size of the time window (in milliseconds) that will be used to batch requests together. By default, all requests made in the same tick will be batched together. See Dataloader [documentation](https://github.com/graphql/dataloader/tree/main#batch-scheduling) for more on this.
+
+```js
+// batch all requests made in a 30ms window
+const fetchImpl = batchFetchImplementation({ batchWindowMs: 30 })
+```
+
+### signal
+Defines a user controlled signal that is used to manually trigger a batch request.
+
+```js
+const signal = makeBatchSchedulerSignal();
+const fetchImpl = batchFetchImplementation({ signal })
+
+const client = google.calendar({
+  version: 'v3',
+  fetchImplementation: fetchImpl,
+})
+
+const pList = calendarClient.events.list({ calendarId: 'john@gmail.com' }),
+const pGet = calendarClient.events.get({
+  calendarId: 'john@gmail.com',
+  eventId: 'xyz123'
+}),
+const pPatch = calendarClient.events.patch({
+  calendarId: 'john@gmail.com',
+  eventId: 'xyz456',
+  requestBody: { colorId: '1' }
+})
+
+...
+
+signal.schedule();
+
+```
+
+## Known limitations
+
+The max batch size varies per Google API. For example, it is set to 50 for Calendar API and to 1000 for People API. Read the docs to find out and configure the options accordingly.
+
+
+Batching is homogeneous, so you cannot batch Calendar API and People API requests together. Instead, you must make 2 seperate batching calls, as there are 2 separate batching endpoints. Concretly what it means is that you should always provide a `fetchImplementation` at the client API level, not at the global Google options level:
+
+```js
+const fetchImpl = batchFetchImplementation()
+
+const calendarClient = google.calendar({
+  version: 'v3',
+  fetchImplementation: fetchImpl,
+})
+
+const peopleClient = google.people({
+  version: 'v1',
+  fetchImplementation: fetchImpl,
+})
+
+// This will raise an error
+await Promise.all([
+    calendarClient.events.list(),
+    peopleClient.people.get()
+  ])
+```
+
+Do this instead:
+
+```js
+const fetchImpl1 = batchFetchImplementation()
+const fetchImpl2 = batchFetchImplementation()
+
+const calendarClient = google.calendar({
+  version: 'v3',
+  fetchImplementation: fetchImpl1,
+})
+
+const peopleClient = google.people({
+  version: 'v1',
+  fetchImplementation: fetchImpl2,
+})
+
+await Promise.all([
+    calendarClient.events.list(),
+    peopleClient.people.get()
+  ])
+```
+
+
 ## Motivation
 
 On August 12, 2020 Google deprecated its global batching endpoints (blog article [here](https://developers.googleblog.com/2018/03/discontinuing-support-for-json-rpc-and.html)). Going forward, it is recommended to use API specific batch endpoints for batching homogeneous requests together. Unfortunately, the official [Google APIs Node.js client](https://github.com/googleapis/google-api-nodejs-client) does not support batching requests together out of the box. The task of composing a batched request and parsing the batch response is left to the developer.
