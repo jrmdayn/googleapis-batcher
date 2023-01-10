@@ -1,5 +1,5 @@
 import Dataloader, { Options as DataloaderOptions } from 'dataloader'
-import { EventEmitter } from 'node:stream'
+import { EventEmitter } from 'node:events'
 import { makeMultipartMixedRequest } from './makeMultipartMixedRequest/makeMultipartMixedRequest.js'
 import { parseMultipartMixedReponse } from './parseMultipartMixedResponse/parseMultipartMixedReponse.js'
 
