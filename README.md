@@ -2,9 +2,27 @@
 
 # Batching library for Google APIs Node.js Client
 
-<!-- [![npm version][npmimg]][npm]
-[![Downloads][downloadsimg]][downloads]
-[![Known Vulnerabilities][snyk-image]][snyk-url] -->
+<p align="center">
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/@jrmdayn/googleapis-batcher">
+    <img alt="" src="https://img.shields.io/npm/v/@jrmdayn/googleapis-batcher">
+  </a>
+  <a aria-label="NPM size" href="https://www.npmjs.com/package/@jrmdayn/googleapis-batcher">
+    <img src="https://img.shields.io/bundlephobia/minzip/@jrmdayn/googleapis-batcher">
+  </a>
+  <a aria-label="NPM downloads" href="https://www.npmjs.com/package/@jrmdayn/googleapis-batcher">
+    <img src="https://img.shields.io/npm/dw/@jrmdayn/googleapis-batcher">
+  </a>
+  <a aria-label="License" href="https://www.npmjs.com/package/@jrmdayn/googleapis-batcher">
+    <img alt="" src="https://img.shields.io/npm/l/@jrmdayn/googleapis-batcher">
+  </a>
+  <a aria-label="PRs Welcome" href="https://github.com/jrmdayn/googleapis-batcher/compare">
+    <img alt="" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
+  </a>
+  <a aria-label="Snyk" href="https://snyk.io/test/github/jrmdayn/googleapis-batcher">
+    <img alt="" src="https://snyk.io/test/github/jrmdayn/googleapis-batcher/badge.svg">
+  </a>
+</p>
+
 
 Node.js library for batching multiple requests made with the official [Google APIs Node.js client](https://github.com/googleapis/google-api-nodejs-client)
 
