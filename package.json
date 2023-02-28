@@ -49,7 +49,7 @@
     "dataloader": "^2.2.1",
     "handlebars": "^4.7.7",
     "next-line": "^1.1.0",
-    "node-fetch": "2"
+    "node-fetch": "2.6.9"
   },
   "peerDependencies": {
     "gaxios": "^5.0.2",
