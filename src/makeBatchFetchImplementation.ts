@@ -9,6 +9,7 @@ import type { RandomStringServiceTag } from './services/randomStringService.js'
 import type { FetchRequest, FetchResponse } from './types.js'
 import { nodeFetchService } from './services/nodeFetchService.js'
 import { nodeRandomStringService } from './services/nodeRandomStringService.js'
+import { logger } from './logger.js'
 
 export type FetchImplementation = Required<GaxiosOptions>['fetchImplementation']
 
@@ -92,10 +93,13 @@ export const makeBatchFetchImplementation = ({
         return [await fetchService.fetch(requests[0])]
       }
       const boundary = randomStringService.generate()
-      const { batchUrl, body, headers, method } = makeMultipartMixedRequest({
+      const req = makeMultipartMixedRequest({
         boundary,
         requests
       })
+
+      const { batchUrl, body, headers, method } = req
+      logger('Multipart request:', method, batchUrl, headers, body)
       const rsp = await fetchService.fetch({
         url: batchUrl,
         body,
