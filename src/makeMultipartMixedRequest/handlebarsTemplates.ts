@@ -19,10 +19,9 @@ Accept: application/json
 {{@key}}: {{this}}
 {{/each}}
 {{#if body}}
-Content-Type: application/json
-{{{json body}}}
-{{/if}}
 
+{{{body}}}
+{{/if}}
 
 {{/each}}
 {{#if requests}}
