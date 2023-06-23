@@ -82,10 +82,13 @@ Bar: Bar
             apiName: 'people',
             path: '/v1/people:createContact'
           }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
           method: 'POST',
-          body: {
+          body: JSON.stringify({
             names: [{ givenName: 'John', familyName: 'Doe' }]
-          }
+          })
         }),
         fetchRequestFactory({
           url: googleApisUrlFactory({
@@ -110,6 +113,7 @@ Content-ID: 1
 POST /v1/people:createContact HTTP/1.1
 Accept: application/json
 Content-Type: application/json
+
 {"names":[{"givenName":"John","familyName":"Doe"}]}
 
 

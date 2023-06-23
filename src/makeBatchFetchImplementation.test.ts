@@ -52,9 +52,10 @@ describe('makeBatchFetchImplementation', () => {
     const p3 = fetchImpl('https://www.googleapis.com/calendar/v3/update', {
       method: 'PATCH',
       headers: {
-        Authorization: 'Bearer token'
+        Authorization: 'Bearer token',
+        'Content-Type': 'application/json'
       },
-      body: { foo: 'bar' }
+      body: JSON.stringify({ foo: 'bar' })
     } as FetchRequestInit)
     await expect(Promise.all([p1, p2, p3])).rejects.toThrow('Not implemented')
     expect(dummyRandomStringService.generate).toHaveBeenCalledOnce()
@@ -91,6 +92,7 @@ PATCH /calendar/v3/update HTTP/1.1
 Accept: application/json
 Authorization: Bearer token
 Content-Type: application/json
+
 {"foo":"bar"}
 
 
