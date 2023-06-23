@@ -1,6 +1,6 @@
 {
   "name": "@jrmdayn/googleapis-batcher",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A library for batching Google APIs requests in Node.js",
   "contributors": [
     "Jeremie Dayan <dayanjeremie@gmail.com>"
@@ -30,6 +30,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/node": "16.11.22",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
@@ -47,6 +48,7 @@
   },
   "dependencies": {
     "dataloader": "^2.2.1",
+    "debug": "^4.3.4",
     "handlebars": "^4.7.7",
     "next-line": "^1.1.0",
     "node-fetch": "2"
