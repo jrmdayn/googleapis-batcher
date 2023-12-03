@@ -121,7 +121,7 @@ Content-Type: application/json
 Content-Type: application/http
 Content-ID: 2
 
-GET /v1/people/c123456789012345?personFields&#x3D;emailAddresses HTTP/1.1
+GET /v1/people/c123456789012345?personFields=emailAddresses HTTP/1.1
 Accept: application/json
 
 

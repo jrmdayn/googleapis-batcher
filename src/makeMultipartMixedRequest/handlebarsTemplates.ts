@@ -13,7 +13,7 @@ export const useBodyTemplate = (context: unknown): string =>
 Content-Type: application/http
 Content-ID: {{inc @index}}
 
-{{method}} {{path}} HTTP/1.1
+{{method}} {{{path}}} HTTP/1.1
 Accept: application/json
 {{#each headers}}
 {{@key}}: {{this}}
