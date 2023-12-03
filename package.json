@@ -1,6 +1,6 @@
 {
   "name": "@jrmdayn/googleapis-batcher",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A library for batching Google APIs requests in Node.js",
   "contributors": [
     "Jeremie Dayan <dayanjeremie@gmail.com>"
