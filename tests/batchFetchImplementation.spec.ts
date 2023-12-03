@@ -15,7 +15,7 @@ describe('batchFetchImplementation', () => {
 
   it('should batch 2 requests', async () => {
     const [calendarList, settings] = await Promise.all([
-      calendarClient.calendarList.list(),
+      calendarClient.calendarList.list({ maxResults: 3 }),
       calendarClient.settings.list()
     ])
 
