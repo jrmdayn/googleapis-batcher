@@ -55,7 +55,7 @@
     "node-fetch": "2"
   },
   "peerDependencies": {
-    "gaxios": "^5.0.2",
-    "googleapis": "^109.0.1"
+    "gaxios": "^6.0.3",
+    "googleapis": "^131.0.0"
   }
 }
