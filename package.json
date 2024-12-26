@@ -48,7 +48,7 @@
     "vitest": "^0.23.1"
   },
   "dependencies": {
-    "dataloader": "^2.2.1",
+    "dataloader": "^2.2.3",
     "debug": "^4.3.4",
     "handlebars": "^4.7.7",
     "next-line": "^1.1.0",
