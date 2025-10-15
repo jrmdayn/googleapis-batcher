@@ -75,6 +75,7 @@ importers:
       vitest:
         specifier: ^0.23.1
         version: 0.23.4
+    publishDirectory: dist
 
 packages:
 
