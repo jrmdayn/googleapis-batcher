@@ -10,6 +10,11 @@
   "bugs": {
     "url": "https://github.com/jrmdayn/googleapis-batcher/issues"
   },
+  "packageManager": "pnpm@10.14.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jrmdayn/googleapis-batcher"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -27,10 +32,11 @@
     "format": "prettier --write .",
     "lint": "eslint --ext .ts src/**",
     "typecheck": "tsc --noEmit",
-    "build": "npm run lint && tsup src/index.ts --dts --format cjs,esm",
+    "build": "tsup src/index.ts --dts --format cjs,esm",
     "test": "vitest"
   },
   "devDependencies": {
+    "@changesets/cli": "2.27.8",
     "@types/debug": "^4.1.7",
     "@types/node": "16.11.22",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
