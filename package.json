@@ -33,7 +33,9 @@
     "lint": "eslint --ext .ts src/**",
     "typecheck": "tsc --noEmit",
     "build": "tsup src/index.ts --dts --format cjs,esm",
-    "test": "vitest"
+    "test": "vitest",
+    "changeset-version": "changeset version",
+    "changeset-publish": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "2.27.8",
