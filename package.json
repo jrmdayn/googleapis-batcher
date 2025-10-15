@@ -6,6 +6,10 @@
     "Jeremie Dayan <dayanjeremie@gmail.com>"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
   "homepage": "https://github.com/jrmdayn/googleapis-batcher",
   "bugs": {
     "url": "https://github.com/jrmdayn/googleapis-batcher/issues"
