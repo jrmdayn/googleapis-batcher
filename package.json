@@ -19,14 +19,15 @@
     "type": "git",
     "url": "https://github.com/jrmdayn/googleapis-batcher"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
     }
   },
   "files": [
@@ -36,7 +37,7 @@
     "format": "prettier --write .",
     "lint": "eslint --ext .ts src/**",
     "typecheck": "tsc --noEmit",
-    "build": "tsup src/index.ts --dts --format cjs,esm",
+    "build": "tsdown && cp package.json dist/",
     "test": "vitest",
     "changeset-version": "changeset version",
     "changeset-publish": "pnpm build && changeset publish"
@@ -54,7 +55,7 @@
     "googleapis": "^110.0.0",
     "open": "^8.4.0",
     "prettier": "^2.7.1",
-    "tsup": "^6.2.3",
+    "tsdown": "0.15.7",
     "typescript": "5.9.3",
     "vite": "^4.0.2",
     "vitest": "^0.23.1"
