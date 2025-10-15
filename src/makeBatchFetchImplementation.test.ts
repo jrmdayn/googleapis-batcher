@@ -1,12 +1,14 @@
-import { FetchRequestInit } from 'gaxios/build/src/common.js'
 import { describe, expect, it, vi } from 'vitest'
 import {
   BatchOptions,
+  FetchImplementation,
   makeBatchFetchImplementation,
   makeBatchSchedulerSignal
 } from './makeBatchFetchImplementation.js'
 import type { FetchService } from './services/fetchService.js'
 import type { RandomStringService } from './services/randomStringService.js'
+
+type FetchRequestInit = Required<Parameters<FetchImplementation>>[1]
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const setupTest = (options: BatchOptions = {}) => {
